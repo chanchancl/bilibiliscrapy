@@ -30,7 +30,8 @@ def text2number(str):
     base = ''
     length = 0
     while length < len(str):
-        curnumber,length = getnumber(str[length:])
+        curnumber,tmp = getnumber(str[length:])
+        length += tmp
         if length != len(str):
             base = str[length]
             curnumber *= Base[base]
@@ -44,6 +45,7 @@ test = [
     '0.999万',
     '1.1万',
     '5656.1万',
+    '1亿5000万',
     '1.5315亿',
 ]
 
@@ -52,6 +54,7 @@ result = [
      9990,
      11000,
      56561000,
+     150000000,
      153150000,
 ]
 
@@ -63,7 +66,7 @@ Base = {
 
 
 if __name__ == '__main__':
-    for i in range(len(test)-1):
+    for i in range(len(test)):
         number = text2number(test[i])
         if number == result[i]:
             print('Success translate %s to %s' % (test[i], number))
