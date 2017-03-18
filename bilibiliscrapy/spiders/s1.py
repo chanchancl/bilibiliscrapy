@@ -19,6 +19,7 @@ class S1Spider(scrapy.Spider):
         data = json.loads(response.body.decode('utf-8'))
         li = data['result']['list']
         
+        # 遍历 list
         for anime in li:
             href = anime['url']
             title = anime['title']

@@ -12,6 +12,9 @@ __all__ = [
     'text2number'
 ]
 
+from collections import OrderedDict
+
+# 从str中读取一个数字（浮点数或整数）
 def getnumber(str):
     length = 0
     while length < len(str):
@@ -40,23 +43,14 @@ def text2number(str):
     
     return int(result)
 
-test = [
-    '8487',
-    '0.999万',
-    '1.1万',
-    '5656.1万',
-    '1亿5000万',
-    '1.5315亿',
-]
-
-result = [
-     8487,
-     9990,
-     11000,
-     56561000,
-     150000000,
-     153150000,
-]
+_UnitTest = OrderedDict({
+    '8487'      : 8487,
+    '0.999万'   : 9990,
+    '1.1万'     : 11000,
+    '5656.1万'  : 56561000,
+    '1亿5000万' : 150000000,
+    '1.5315亿'  : 153150000,
+})
 
 Base = {
     '':1,
@@ -66,10 +60,10 @@ Base = {
 
 
 if __name__ == '__main__':
-    for i in range(len(test)):
-        number = text2number(test[i])
-        if number == result[i]:
-            print('Success translate %s to %s' % (test[i], number))
+    for (raw, result) in _UnitTest.items():
+        number = text2number(raw)
+        if number == result:
+            print('Success translate %10s to %s' % (raw, number))
         else:
-            print('Error! translate[%s] get %d ,but %s expected!' % (test[i],number, result[i]) )
+            print('Error! translate[%s] get %d ,but %s expected!' % (raw, number, result))
         
