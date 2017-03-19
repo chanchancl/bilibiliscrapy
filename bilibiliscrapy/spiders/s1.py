@@ -39,7 +39,8 @@ class S1Spider(scrapy.Spider):
         item['pub_time'] = response.meta['pub_time']
         if item['pub_time'] < 0:
             item['pub_time'] = 0
-        item['pub_time_text'] = time.localtime(item['pub_time'])
+        t = time.localtime(item['pub_time'])
+        item['pub_time_text'] = '{year}年{month}月{day}日'.format(year=t[0],month=t[1],day=t[2])
         # 总播放数
         item['total_play_text'] = response.xpath('//span[@class="info-count-item info-count-item-play"]/em/text()').extract()[0]
         item['total_play_number'] = text2number(item['total_play_text'])
