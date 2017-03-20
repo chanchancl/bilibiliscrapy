@@ -21,11 +21,17 @@ Order = OrderedDict()
 Order['title'] = '番剧名称'
 Order['total_play_number'] = '总播放量'
 Order['total_follow_number'] = '追番人数'
-Order['total_danmu_number'] = '弹幕总数'
+Order['total_danmaku_number'] = '弹幕总数'
 Order['pub_time_text'] = '放送时间'
+Order['coins'] = '硬币数'
+Order['total_episodes'] = '总集数(一季)'
+Order['average_play'] = '平均播放量'
+Order['average_danmaku'] = '平均弹幕量'
+Order['coinbiplay'] = '币播比' 
 Order['total_play_text'] = '总播放量(文本)'
 Order['total_follow_text'] = '追番人数(文本)'
-Order['total_danmu_text'] = '弹幕总数(文本)'
+Order['total_danmaku_text'] = '弹幕总数(文本)'
+Order['jp_title'] = '日文名称'
 Order['pub_time'] = '放送时间(Epoch)'
 
 # 按播放数，降序排序
@@ -44,10 +50,12 @@ for i,anime in enumerate(data):
     for j,itemkey in enumerate(Order.keys()):
         # 获得实际值
         item = anime[itemkey]
+        '''
         if isinstance(item, float):
             # 这里遇到比较蛋疼的问题，即便转换为int再写入，在excel中，一开始还是文本形式的数字
             item = int(item)
             print('translate int %s' % item)
+        '''
         # 在单元格 i+1列，j行 写入数据  (空过首行)
         sheet1.write(i+1, j, str(item))
 
