@@ -34,6 +34,7 @@
 * 数据保存在名为 items.json 的json文件。
   * PS : 添加了工具 data.py
   * 你可以使用 data.py 将生成的 items.json 转换为 excel 表格方便查看,效果参照 preview
+  * 现在包含一个demo在，items.json 和 items.xls
 
 
 

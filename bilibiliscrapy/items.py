@@ -27,6 +27,7 @@ class BilibiliscrapyItem(scrapy.Item):
     total_episodes = scrapy.Field()
     average_play = scrapy.Field()
     average_danmaku = scrapy.Field()
+    average_coins = scrapy.Field()
     coinbiplay = scrapy.Field()
     is_finish = scrapy.Field()
 

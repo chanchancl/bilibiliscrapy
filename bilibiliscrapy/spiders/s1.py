@@ -71,8 +71,9 @@ class S1Spider(scrapy.Spider):
         item['bangumi_id'] = result.get('bangumi_id', '')
 
         # 计算一下平均值
-        item['average_play'] = round((item['total_play_number'] / item['total_episodes']), 2)
-        item['average_danmaku'] = round((item['total_danmaku_number'] / item['total_episodes']), 2)
+        item['average_play'] = round((item['total_play_number'] / item['total_episodes']), 0)
+        item['average_danmaku'] = round((item['total_danmaku_number'] / item['total_episodes']), 0)
+        item['average_coins'] = round((item['coins'] / item['total_episodes']), 0)
         item['coinbiplay'] = round((item['coins'] / item['total_play_number']),5)
         
         yield item
