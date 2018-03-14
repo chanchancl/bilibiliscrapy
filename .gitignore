@@ -48,3 +48,6 @@ Temporary Items
 *.html
 *.pyc
 /before
+*.xls
+items.json
+*.json

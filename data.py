@@ -1,4 +1,5 @@
 
+import time
 import json
 import xlwt
 from collections import OrderedDict
@@ -14,8 +15,6 @@ def getjson():
             else:
                 break
 
-data = [x for x in getjson()]
-
 # 按照下面的顺序(列) 生成表格
 Order = OrderedDict()
 #  key  ,  header
@@ -26,19 +25,21 @@ Order['total_follow_number'] = '追番人数'
 Order['total_danmaku_number'] = '弹幕总数'
 Order['pub_time_text'] = '放送时间'
 Order['coins'] = '硬币数'
-Order['total_episodes'] = '总集数(一季)'
+Order['total_episodes'] = '总集数'
 Order['average_play'] = '平均播放量'
 Order['average_danmaku'] = '平均弹幕量'
 Order['average_coins'] = '平均硬币数'
 Order['coinbiplay'] = '币播比' 
-Order['total_play_text'] = '总播放量(文本)'
-Order['total_follow_text'] = '追番人数(文本)'
-Order['total_danmaku_text'] = '弹幕总数(文本)'
+Order['total_play_text'] = '总播放量'
+Order['total_follow_text'] = '追番人数'
+Order['total_danmaku_text'] = '弹幕总数'
 Order['jp_title'] = '日文名称'
 Order['pub_time'] = '放送时间(Epoch)'
 
 # 按播放数，降序排序
 # b = sorted(data, key=lambda d : d['total_play_number'], reverse=True)
+
+data = [x for x in getjson()]
 
 f = xlwt.Workbook()
 sheet1 = f.add_sheet(u'sheet1', cell_overwrite_ok=True)
@@ -58,7 +59,8 @@ for i,anime in enumerate(data):
             item = round(item, 0)
         sheet1.write(i+1, j, str(item))
 
-f.save('items.xls')
+filename = time.strftime("Items %Y-%m-%d(%H-%M-%S).xls")
+f.save(filename)
 
 
 

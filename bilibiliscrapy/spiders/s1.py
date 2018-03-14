@@ -5,10 +5,11 @@ import time
 from bilibiliscrapy.translate import text2number
 from bilibiliscrapy.items import BilibiliscrapyItem
 
-oldtemplate = 'http://bangumi.bilibili.com/web_api/season/index?page={page}&page_size=20&version=0&is_finish=0&start_year=0&quarter=0&tag_id=&index_type=1&index_sort=0' 
-newtemplate = 'http://bangumi.bilibili.com/jsonp/seasoninfo/{season_id}.ver'
+listTemplate = 'https://bangumi.bilibili.com/web_api/season/index_global?page={page}&page_size=20&version=0&is_finish=0&start_year=0&tag_id=&index_type=1&index_sort=0&quarter=0'
 
-#scrapy shell "http://bangumi.bilibili.com/web_api/season/index?page=1&page_size=40&version=0&is_finish=0&start_year=0&quarter=0&tag_id=&index_type=1&index_sort=0"
+seasonTemplate = 'https://bangumi.bilibili.com/jsonp/seasoninfo/{season_id}.ver?callback=seasonListCallback&jsonp=jsonp&_={time}'
+
+#scrapy shell "https://bangumi.bilibili.com/web_api/season/index_global?page={page}&page_size=20&version=0&is_finish=0&start_year=0&tag_id=&index_type=1&index_sort=0&quarter=0"
 #scrapy shell "http://bangumi.bilibili.com/anime/5806"
 #scrapy shell "http://bangumi.bilibili.com/jsonp/seasoninfo/5806.ver"
 
@@ -16,7 +17,7 @@ class S1Spider(scrapy.Spider):
     name = "s1"
     allowed_domains = ["bangumi.bilibili.com"]
     end_of_page = 160
-    start_urls = [ oldtemplate.format(page=x) for x in range(1, end_of_page)]
+    start_urls = [ listTemplate.format(page=x) for x in range(1, end_of_page)]
 
     def parse(self, response):
         data = json.loads(response.body.decode('utf-8'))
@@ -29,7 +30,6 @@ class S1Spider(scrapy.Spider):
             title = anime['title']
             pub_time = float(anime.get('pub_time',0))
             item['season_id'] = anime.get('season_id', 0)
-
             yield scrapy.Request(url, meta={'title':title, 'item':item,'url':url,'pub_time':pub_time} ,callback=self.parse_item, dont_filter=True)
 
     
@@ -48,7 +48,7 @@ class S1Spider(scrapy.Spider):
         item['total_follow_text'] = response.xpath('//span[@class="info-count-item info-count-item-fans"]/em/text()').extract()[0]
         # 弹幕总数
         item['total_danmaku_text'] = response.xpath('//span[@class="info-count-item info-count-item-review"]/em/text()').extract()[0]
-        url = newtemplate.format(season_id=item['season_id'])
+        url = seasonTemplate.format(season_id=item['season_id'], time = int(time.time())*1000)
         yield scrapy.Request(url, meta={'item':item },callback=self.parse_item2)
     
     def parse_item2(self, response):
@@ -60,6 +60,7 @@ class S1Spider(scrapy.Spider):
             body = body.rsplit(')', 1)[0]
         result = json.loads(body)['result']
 
+        print('Right here')
         item['total_episodes'] = len(result['episodes'])
         item['total_play_number'] = int(result['play_count'])
         item['total_follow_number'] = int(result['favorites'])
