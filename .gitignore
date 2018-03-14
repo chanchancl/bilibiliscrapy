@@ -49,5 +49,4 @@ Temporary Items
 *.pyc
 /before
 *.xls
-items.json
 *.json
