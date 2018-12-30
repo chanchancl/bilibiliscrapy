@@ -20,21 +20,23 @@ Order = OrderedDict()
 #  key  ,  header
 #  Item的Filed Name, 在 Header显示的名字
 Order['title'] = '番剧名称'
-Order['total_play_number'] = '总播放量'
-Order['total_follow_number'] = '追番人数'
+Order['total_view_number'] = '总播放量'
+Order['total_favorite_number'] = '追番人数'
 Order['total_danmaku_number'] = '弹幕总数'
 Order['pub_time_text'] = '放送时间'
 Order['coins'] = '硬币数'
 Order['total_episodes'] = '总集数'
-Order['average_play'] = '平均播放量'
+Order['average_view'] = '平均播放量'
 Order['average_danmaku'] = '平均弹幕量'
 Order['average_coins'] = '平均硬币数'
 Order['coinbiplay'] = '币播比' 
-Order['total_play_text'] = '总播放量'
-Order['total_follow_text'] = '追番人数'
+Order['total_view_text'] = '总播放量'
+Order['total_favorite_text'] = '追番人数'
 Order['total_danmaku_text'] = '弹幕总数'
+Order['season_id'] = 'Season ID'
 Order['jp_title'] = '日文名称'
 Order['pub_time'] = '放送时间(Epoch)'
+Order['cover_url'] = '封面地址'
 
 # 按播放数，降序排序
 # b = sorted(data, key=lambda d : d['total_play_number'], reverse=True)
@@ -61,24 +63,3 @@ for i,anime in enumerate(data):
 
 filename = time.strftime("Items %Y-%m-%d(%H-%M-%S).xls")
 f.save(filename)
-
-
-
-'''
-# 下面时曾经临时用到过的代码
-def resplit(text):
-    return re.split('\s+,\s+', text)
-
-data = [x for x in getjson()]
-
-for anime in data:
-    t = anime['pub_time_text']
-    anime['pub_time_text'] = '{year}年{month}月{day}日'.format(year=t[0],month=t[1],day=t[2])
-
-f = open('newitems.json', 'w')
-
-for anime in data:
-    line = json.dumps(anime) + '\n'
-    f.write(line)
-f.close()
-'''
