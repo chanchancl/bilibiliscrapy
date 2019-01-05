@@ -41,7 +41,7 @@ Order['cover_url'] = '封面地址'
 # 按播放数，降序排序
 # b = sorted(data, key=lambda d : d['total_play_number'], reverse=True)
 
-data = [x for x in getjson()]
+jsonData = getjson()
 
 f = xlwt.Workbook()
 sheet1 = f.add_sheet(u'sheet1', cell_overwrite_ok=True)
@@ -51,15 +51,15 @@ for x, key in enumerate(Order.keys()):
     sheet1.write(0, x, Order[key])
 
 # 遍历所有每条数据
-for i,anime in enumerate(data):
+for line ,anime in enumerate(jsonData):
     # 按Order的顺序遍历数据中的每个字段
-    for j,itemkey in enumerate(Order.keys()):
+    for column ,itemkey in enumerate(Order.keys()):
         # 获得实际值
         item = anime[itemkey]
-        # 在单元格 i+1列，j行 写入数据  (空过首行)
+        # 在单元格 line+1行，column列 写入数据  (空过首行)
         if itemkey.startswith('average'):
             item = round(item, 0)
-        sheet1.write(i+1, j, str(item))
+        sheet1.write(line + 1 , column, str(item))
 
 filename = time.strftime("Items %Y-%m-%d(%H-%M-%S).xls")
 f.save(filename)
