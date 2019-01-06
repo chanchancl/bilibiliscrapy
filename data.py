@@ -1,7 +1,7 @@
 
 import time
 import json
-import xlwt
+import openpyxl
 from collections import OrderedDict
 
 
@@ -19,36 +19,37 @@ def getjson():
 Order = OrderedDict()
 #  key  ,  header
 #  Item的Filed Name, 在 Header显示的名字
-Order['title'] = '番剧名称'
-Order['total_view_number'] = '总播放量'
-Order['total_favorite_number'] = '追番人数'
-Order['total_danmaku_number'] = '弹幕总数'
-Order['pub_time_text'] = '放送时间'
-Order['coins'] = '硬币数'
-Order['total_episodes'] = '总集数'
-Order['average_view'] = '平均播放量'
-Order['average_danmaku'] = '平均弹幕量'
-Order['average_coins'] = '平均硬币数'
-Order['coinbiplay'] = '币播比' 
-Order['total_view_text'] = '总播放量'
-Order['total_favorite_text'] = '追番人数'
-Order['total_danmaku_text'] = '弹幕总数'
-Order['season_id'] = 'Season ID'
-Order['jp_title'] = '日文名称'
-Order['pub_time'] = '放送时间(Epoch)'
-Order['cover_url'] = '封面地址'
+
+Order['title'] = { 'Header' : '番剧名称', 'Type' : 'text'}
+Order['total_view_number']      = {'Header': '总播放量', 'Type' : 'number' }
+Order['total_favorite_number']  = {'Header': '追番人数', 'Type' : 'number' }
+Order['total_danmaku_number']   = {'Header': '弹幕总数', 'Type' : 'number' }
+Order['pub_time_text']          = {'Header': '放送时间', 'Type' : 'text' }
+Order['coins']                  = {'Header': '硬币数', 'Type' : 'number' }
+Order['total_episodes']         = {'Header': '总集数', 'Type' : 'number' }
+Order['average_view']           = {'Header': '平均播放量', 'Type' : 'number' }
+Order['average_danmaku']        = {'Header': '平均弹幕量', 'Type' : 'number' }
+Order['average_coins']          = {'Header': '平均硬币数', 'Type' : 'number' }
+Order['coinbiplay']             = {'Header': '币播比' , 'Type' : 'float' }
+Order['total_view_text']        = {'Header': '总播放量', 'Type' : 'text' }
+Order['total_favorite_text']    = {'Header': '追番人数', 'Type' : 'text' }
+Order['total_danmaku_text']     = {'Header': '弹幕总数', 'Type' : 'text' }
+Order['season_id']              = {'Header': 'Season ID', 'Type' : 'number' }
+Order['jp_title']               = {'Header': '日文名称', 'Type' : 'text' }
+Order['pub_time']               = {'Header': '放送时间(Epoch)', 'Type' : 'number' }
+Order['cover_url']              = {'Header': '封面地址', 'Type' : 'text ' }
 
 # 按播放数，降序排序
 # b = sorted(data, key=lambda d : d['total_play_number'], reverse=True)
 
 jsonData = getjson()
 
-f = xlwt.Workbook()
-sheet1 = f.add_sheet(u'sheet1', cell_overwrite_ok=True)
+excFile = openpyxl.Workbook()
+sheet = excFile.active
 
 # 写入第一行
 for x, key in enumerate(Order.keys()):
-    sheet1.write(0, x, Order[key])
+    sheet.cell(1, x + 1).value = Order[key]['Header']
 
 # 遍历所有每条数据
 for line ,anime in enumerate(jsonData):
@@ -59,7 +60,10 @@ for line ,anime in enumerate(jsonData):
         # 在单元格 line+1行，column列 写入数据  (空过首行)
         if itemkey.startswith('average'):
             item = round(item, 0)
-        sheet1.write(line + 1 , column, str(item))
+        cell = sheet.cell(line+1+1, column+1)
+        sheet.cell(line+1+1, column + 1).value = str(item)
+        
+        
 
-filename = time.strftime("Items %Y-%m-%d(%H-%M-%S).xls")
-f.save(filename)
+filename = time.strftime("Items %Y-%m-%d(%H-%M-%S).xlsx")
+excFile.save(filename)
